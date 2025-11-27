@@ -15,6 +15,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TaskQueryDto } from './dto/query-task.dto';
 import { TimestampInterceptor } from 'src/common/interceptors/timestamp.interceptor';
+import { ParseObjectIdPipe } from '@nestjs/mongoose';
 
 @ApiTags('tasks')
 @UseInterceptors(TimestampInterceptor)
@@ -36,7 +37,7 @@ export class TasksController {
 
   @ApiOperation({ summary: 'Get a task by id' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', new ParseObjectIdPipe()) id: string) {
     return this.tasksService.findOne(id);
   }
 
@@ -48,10 +49,7 @@ export class TasksController {
 
   @ApiOperation({ summary: 'Update a task by id' })
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTaskDto: UpdateTaskDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(id, updateTaskDto);
   }
 
