@@ -4,9 +4,9 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { apiReference } from '@scalar/nestjs-api-reference';
 
 async function bootstrap() {
+  const { apiReference } = await import('@scalar/nestjs-api-reference');
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
@@ -30,7 +30,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   app.use(
-    '/reference',
+    '/api',
     apiReference({
       content: document,
     }),
